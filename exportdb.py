@@ -1,3 +1,4 @@
+# 导出为csv文件
 import codecs
 import csv
 import pymongo
@@ -10,7 +11,6 @@ db = client['opera' + country]
 collection = db[category_param]
 # 查询库中数据
 cursor = collection.find()
-# 打开csv文件
 with codecs.open('data_' + category_param + "_" + country + '.csv', 'w', 'utf-8') as csvfile:
     writer = csv.writer(csvfile)
     # 先写入columns_name
@@ -20,4 +20,5 @@ with codecs.open('data_' + category_param + "_" + country + '.csv', 'w', 'utf-8'
     for data in cursor:
         writer.writerows([[data["original_url"], data["category"], data["comment_num"], data["is_transcoded"],
                            data["open_type"], data["reports"], data["shared_count"], data["source"], data["subtype"],
-                           data["title"], data["total_emotions"], data["total_like_count"], data["total_shared_count"]]])
+                           data["title"], data["total_emotions"], data["total_like_count"],
+                           data["total_shared_count"]]])
