@@ -2,7 +2,6 @@
 
 import requests
 import time
-import pymongo
 import json
 import sys
 from pymongo import MongoClient
@@ -13,8 +12,8 @@ loopcount = sys.argv[3]
 print("country is " + country + "category is " + category_param)
 category_url = "https://news-af.op-mobile.opera.com/" + country + "/en/v1/news/category/"
 main_url = "https://news-af.op-mobile.opera.com/" + country + "/en/v1/news/main"
-#your own user id
-user = "XXXX"
+# your own user id
+user = "5751edfdfdd3d046ddebce586f9e8fa3a4d53bc2"
 startTime = int(time.time())
 session = requests.Session()
 
@@ -153,7 +152,8 @@ def loadcategory(category, time):
                     "total_shared_count": jsonparam.get("social_info", {}).get("total_shared_count", -1)
                 }
                 topnews.append(jsonparam["news_entry_id"])
-                result = collection.update_one({"original_url": jsonparam["original_url"]}, {'$set': listinfo}, upsert=True)
+                result = collection.update_one({"original_url": jsonparam["original_url"]}, {'$set': listinfo},
+                                               upsert=True)
         else:
             if info.get("social_info", {}) is None:
                 info["social_info"] = {}
@@ -192,6 +192,7 @@ def loadcategory(category, time):
     requestedJson["news_id_list"].update({contents.json()["request_id"]: requested})
 
 
-refreshcategory(category=category_param)
-for i in range(int(loopcount)):
-    loadcategory(category=category_param, time=i)
+if __name__ == '__main__':
+    refreshcategory(category=category_param)
+    for i in range(int(loopcount)):
+        loadcategory(category=category_param, time=i)
